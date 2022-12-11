@@ -10,41 +10,46 @@ const api = createApi({
   accessKey: process.env.API_KEY
 });
 
+type Photo = {
+  url: string,
+  alt_description: string,
+  author: string
+}
+
 interface State {
-  title: string;
-  gallery: string[];
   searchEntry: string | null;
   recentSearches: string[];
+  pictures: Photo[]
 }
 
 const state: State = {
-  title: 'A Photo Gallery',
-  gallery: [],
   searchEntry: '',
   recentSearches: [],
+  pictures: [],
 };
 
 const renderImage = (child: string, parent: HTMLElement) => {
   parent.innerHTML += child;
 };
 
-const imageTemplate = (url: string) => `
+const imageTemplate = (url: string, alt_description: string, author: string) => `
     <article class="image-container">
       <figure class="image-wrapper">
         <div class="img-item__front">
-          <img class="img-item" src="${url}" />
+          <img class="img-item" src="${url}" alt="${alt_description}" />
         </div>
         <div class="img-item__back">
-          <h4>Image Details</h4>
+          <h4>Author: </h4>
+          <h4>${author}</h4>
         </div>
       </figure>
     </article>
   `;
 
-const displayPics = (pics: string[]) => {
+const displayPics = (pics: Photo[]) => {
   resultContainer.innerHTML = '';
   pics.forEach(imageSrc => {
-    renderImage(imageTemplate(imageSrc), resultContainer);
+    renderImage(imageTemplate(imageSrc.url, imageSrc.alt_description, imageSrc.author), resultContainer);
   });
 };
 
@@ -57,9 +62,15 @@ const conductGallerySearch = () => {
       orientation: 'landscape',
     })
     .then(result => {
-      state.gallery = [];
-      state.gallery = result.response.results.map(element => (element.urls.regular));
-      displayPics(state.gallery);
+      state.pictures = [];
+      state.pictures =  result.response.results.map(element => {
+        return {
+          url: element.urls.regular,
+          alt_description: element.alt_description,
+          author: element.user.name,
+        }
+      });
+      displayPics(state.pictures);
     })
     .catch(() => {
       console.log('something went wrong!'); // TODO make use of catch handler
@@ -75,8 +86,8 @@ go.addEventListener('click', event => {
   resultContainer.innerHTML += '';
 });
 
-window.addEventListener('statechange', () => {
-  displayPics(state.gallery);
-});
+// window.addEventListener('statechange', () => {
+//   displayPics(state.gallery);
+// });
 
 window.dispatchEvent(new Event('statechange'));

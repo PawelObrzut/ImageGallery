@@ -24,7 +24,7 @@ interface State {
 
 const state: State = {
   searchEntry: '',
-  recentSearches: [],
+  recentSearches: [], // TODO use localStorage
   pictures: [],
 };
 
@@ -46,10 +46,10 @@ const imageTemplate = (url: string, alt_description: string, author: string) => 
     </article>
   `;
 
-const displayPics = (pics: Photo[]) => {
+const displayPics = (pictures: Photo[]) => {
   resultContainer.innerHTML = '';
-  pics.forEach(imageSrc => {
-    renderImage(imageTemplate(imageSrc.url, imageSrc.alt_description, imageSrc.author), resultContainer);
+  pictures.forEach(({url, alt_description, author}) => {
+    renderImage(imageTemplate(url, alt_description, author), resultContainer);
   });
 };
 
@@ -63,7 +63,7 @@ const conductGallerySearch = () => {
     })
     .then(result => {
       state.pictures = [];
-      state.pictures =  result.response.results.map(element => {
+      state.pictures = result.response.results.map(element => {
         return {
           url: element.urls.regular,
           alt_description: element.alt_description,
@@ -85,9 +85,5 @@ go.addEventListener('click', event => {
   conductGallerySearch();
   resultContainer.innerHTML += '';
 });
-
-// window.addEventListener('statechange', () => {
-//   displayPics(state.gallery);
-// });
 
 window.dispatchEvent(new Event('statechange'));

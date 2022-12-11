@@ -64,17 +64,27 @@ body {
   gap: 0.5rem;
 }
 
-/* .image-container {
+.image-wrapper {
   margin: 0;
   padding: 0;
-  border: solid 1px red;
-} */
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
 
-.img-item {
+.img-item, .img-item__front {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 50% 50%;
+}
+
+.image-container .img-item__back {
+  color: red;
+  opacity: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
 .container :nth-child(1) {

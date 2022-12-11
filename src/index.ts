@@ -7,7 +7,7 @@ const go = document.querySelector<HTMLElement>('.input-form__btn');
 const resultContainer = document.querySelector<HTMLElement>('.container');
 
 const api = createApi({
-  accessKey: process.env.API_KEY, // TODO webpack has a env variable plugin - check it out
+  accessKey: process.env.API_KEY
 });
 
 interface State {
@@ -30,7 +30,14 @@ const renderImage = (child: string, parent: HTMLElement) => {
 
 const imageTemplate = (url: string) => `
     <article class="image-container">
-      <img class="img-item" src="${url}" />
+      <figure class="image-wrapper">
+        <div class="img-item__front">
+          <img class="img-item" src="${url}" />
+        </div>
+        <div class="img-item__back">
+          <h4>Image Details</h4>
+        </div>
+      </figure>
     </article>
   `;
 
@@ -52,7 +59,6 @@ const conductGallerySearch = () => {
     .then(result => {
       state.gallery = [];
       state.gallery = result.response.results.map(element => (element.urls.regular));
-      console.log('done');
       displayPics(state.gallery);
     })
     .catch(() => {

@@ -11,7 +11,10 @@
       </header>
       <section class="search">
         <form class="input-form">
-          <input type="text" placeholder="Search..." class="input-form__querry">
+          <input type="text" placeholder="Search..." class="input-form__querry" list="recent-search-queries">
+          <datalist class="recentSearches" id="recent-search-queries">
+
+          </datalist>
           <input type="submit" class="input-form__btn" value="GO">
         </form>
       </section>

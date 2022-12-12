@@ -5,6 +5,7 @@ import { createApi } from 'unsplash-js';
 const search = document.querySelector<HTMLElement>('.input-form__querry');
 const go = document.querySelector<HTMLElement>('.input-form__btn');
 const resultContainer = document.querySelector<HTMLElement>('.container');
+const searchList = document.querySelector<HTMLElement>('#recent-search-queries')
 
 const api = createApi({
   accessKey: process.env.API_KEY
@@ -17,15 +18,22 @@ type Photo = {
 }
 
 interface State {
-  searchEntry: string | null;
   recentSearches: string[];
   pictures: Photo[]
 }
 
-const state: State = {
-  searchEntry: '',
-  recentSearches: [], // TODO use localStorage
+let state: State = {
+  recentSearches: JSON.parse(localStorage.getItem('recentSearches')) || [],
   pictures: [],
+};
+
+const update = (newState: State) => {
+  state = { ...state, ...newState };
+  window.dispatchEvent(new Event('statechange'));
+};
+
+const saveRecentSearches = (recentSearches: string[]) => {
+  window.localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
 };
 
 const renderImage = (child: string, parent: HTMLElement) => {
@@ -56,34 +64,40 @@ const displayPics = (pictures: Photo[]) => {
 const conductGallerySearch = () => {
   api.search
     .getPhotos({
-      query: state.searchEntry,
-      page: 1, // TODO add pagination
+      query: (search as HTMLInputElement).value,
+      page: 1,
       perPage: 10,
       orientation: 'landscape',
     })
     .then(result => {
-      state.pictures = [];
-      state.pictures = result.response.results.map(element => {
+      const resultPics = result.response.results.map(element => {
         return {
           url: element.urls.regular,
           alt_description: element.alt_description,
           author: element.user.name,
         }
       });
-      displayPics(state.pictures);
+
+      update({
+        recentSearches: JSON.parse(localStorage.getItem('recentSearches')) || [],
+        pictures: resultPics,
+      });
+
+      (search as HTMLInputElement).value = '';
     })
     .catch(() => {
-      console.log('something went wrong!'); // TODO make use of catch handler
+      console.log('something went wrong!');
     });
 };
 
 go.addEventListener('click', event => {
   event.preventDefault();
-
-  state.searchEntry =  (search as HTMLInputElement).value;
-  (search as HTMLInputElement).value = '';
   conductGallerySearch();
+});
+
+window.addEventListener('statechange', () => {
   resultContainer.innerHTML += '';
+  displayPics(state.pictures);
 });
 
 window.dispatchEvent(new Event('statechange'));

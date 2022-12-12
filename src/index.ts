@@ -5,7 +5,7 @@ import { createApi } from 'unsplash-js';
 const search = document.querySelector<HTMLElement>('.input-form__querry');
 const go = document.querySelector<HTMLElement>('.input-form__btn');
 const resultContainer = document.querySelector<HTMLElement>('.container');
-const searchList = document.querySelector<HTMLElement>('#recent-search-queries')
+const searchList = document.querySelector<HTMLElement>('#recent-search-queries');
 
 const api = createApi({
   accessKey: process.env.API_KEY
@@ -15,12 +15,12 @@ type Photo = {
   url: string,
   alt_description: string,
   author: string
-}
+};
 
 interface State {
   recentSearches: string[];
-  pictures: Photo[]
-}
+  pictures: Photo[];
+};
 
 let state: State = {
   recentSearches: JSON.parse(localStorage.getItem('recentSearches')) || [],
@@ -33,8 +33,18 @@ const update = (newState: State) => {
 };
 
 const saveRecentSearches = (recentSearches: string[]) => {
-  window.localStorage.setItem('recentSearches', JSON.stringify(recentSearches))
+  window.localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
 };
+
+const addSearchHistory = (recentSearches: string[]) => {
+  searchList.innerHTML = '';
+  recentSearches.map(query => {
+    const optionTag = document.createElement('option');
+    optionTag.setAttribute('value', query);
+    optionTag.innerText = query;
+    searchList.appendChild(optionTag);
+  })
+}
 
 const renderImage = (child: string, parent: HTMLElement) => {
   parent.innerHTML += child;
@@ -92,12 +102,18 @@ const conductGallerySearch = () => {
 
 go.addEventListener('click', event => {
   event.preventDefault();
+  state.recentSearches.unshift((search as HTMLInputElement).value);
+  if (state.recentSearches.length > 3) {
+    state.recentSearches.pop();
+  }
+  saveRecentSearches(state.recentSearches);
   conductGallerySearch();
 });
 
 window.addEventListener('statechange', () => {
   resultContainer.innerHTML += '';
   displayPics(state.pictures);
+  addSearchHistory(state.recentSearches);
 });
 
 window.dispatchEvent(new Event('statechange'));

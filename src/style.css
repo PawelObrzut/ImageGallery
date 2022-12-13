@@ -29,7 +29,7 @@ body {
   color: var(--silver);
   margin: auto;
   text-align: center;
-  font-size: 3rem;
+  font-size: 2rem;
   padding: 1.5rem;
   z-index: 5;
   border-bottom: solid 1rem var(--black);
@@ -55,7 +55,7 @@ body {
   width: 3.2rem;
   height: 3.2rem;
   border-radius: 50%;
-  background-color: #003606;
+  background-color: var(--dark-green);
   color: var(--silver);
   border-color: var(--silver);
   cursor: pointer;
@@ -113,6 +113,33 @@ body {
 .image-wrapper:hover .img-item__front img {
   -webkit-filter: grayscale(100%) blur(0.1rem);
 	filter: grayscale(100%) blur(0.1rem);
+}
+
+.pages {
+  padding: 0 1rem;
+  list-style: none;
+  background-color: var(--dark-green);
+  color: var(--silver);
+  border-bottom: solid 0.5rem var(--black);
+  margin-top: 0;
+}
+
+.pages li {
+  display: inline;
+  cursor: pointer;
+}
+
+.prevPage {
+  float: left;
+}
+
+.nextPage {
+  float: right;
+}
+
+.prevPage:hover,
+.nextPage:hover {
+  color: red;
 }
 
 @keyframes move-down {

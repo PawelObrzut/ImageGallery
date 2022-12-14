@@ -23,7 +23,7 @@ interface State {
   recentSearches: string[];
   pictures: Photo[];
   currentPage: number;
-  total_pages: number | null;
+  total_pages: number;
 };
 
 let state: State = {
@@ -31,7 +31,7 @@ let state: State = {
   recentSearches: JSON.parse(localStorage.getItem('recentSearches')) || [],
   pictures: [],
   currentPage: 0,
-  total_pages: null,
+  total_pages: 0,
 };
 
 const update = (newState: State) => {
@@ -78,17 +78,18 @@ const displayPics = (pictures: Photo[]) => {
   });
 };
 
-const paginationTemplate = () =>{
+const paginationTemplate = (currentPage: number, numberOfPages:number) =>{
+
   return `
-    <li class="prevPage"> < PREV </li>
-    <li class="currentPage">0</li>
-    <li class="nextPage"> NEXT > </li>
+    <li><button ${currentPage < 2 ? "disabled" : "active" } class="prevPage"> < PREV </button></li>
+    <li class="currentPage">${currentPage} / ${numberOfPages}</li>
+    <li><button ${currentPage <= numberOfPages - 1 ? "active" : "disabled" } class="nextPage"> NEXT > </button></li>
   `
 };
 
 const displayPagination = () => {
   pages.innerHTML = '';
-  pages.innerHTML += paginationTemplate();
+  pages.innerHTML += paginationTemplate(state.currentPage, state.total_pages);
 };
 
 const conductGallerySearch = () => {
@@ -129,22 +130,19 @@ go.addEventListener('click', event => {
   if (state.recentSearches.length > 3) {
     state.recentSearches.pop();
   }
+  state.currentPage = 1;
   saveRecentSearches(state.recentSearches);
   state.searchQuery = (search as HTMLInputElement).value;
   conductGallerySearch();
-  state.currentPage = state.currentPage + 1;
 });
 
 pages.addEventListener('click', (event: Event) => {
   if ((event.target as Element).matches('.prevPage')) {
-    console.log('prev page');
     state.currentPage = state.currentPage - 1;
     conductGallerySearch();
   }
   if ((event.target as Element).matches('.nextPage')) {
-    console.log('next page');
     state.currentPage = state.currentPage + 1;
-    console.log(state);
     conductGallerySearch();
   }
 })

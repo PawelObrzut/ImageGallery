@@ -126,7 +126,12 @@ body {
 
 .pages li {
   display: inline;
-  cursor: pointer;
+}
+
+.prevPage,
+.nextPage {
+  border-radius: 1rem;
+  color: var(--dark-green);
 }
 
 .prevPage {
@@ -140,6 +145,7 @@ body {
 .prevPage:hover,
 .nextPage:hover {
   color: red;
+  cursor: pointer;
 }
 
 @keyframes move-down {

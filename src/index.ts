@@ -1,10 +1,12 @@
 import * as _ from 'lodash';
 import './style.css';
+import './spinner.css';
 import { createApi } from 'unsplash-js';
 
 const search = document.querySelector<HTMLElement>('.input-form__querry');
 const go = document.querySelector<HTMLElement>('.input-form__btn');
 const resultContainer = document.querySelector<HTMLElement>('.container');
+const spinnerContainer = document.querySelector<HTMLElement>('.spinner');
 const searchList = document.querySelector<HTMLElement>('#recent-search-queries');
 const pages = document.querySelector<HTMLUListElement>('.pages');
 
@@ -66,7 +68,7 @@ const imageTemplate = (url: string, alt_description: string, author: string) => 
         <div class="img-item__back">
           <h4>Author: </h4>
           <h4>${author}</h4>
-        </div>
+        </div> 
       </figure>
     </article>
   `;
@@ -79,7 +81,6 @@ const displayPics = (pictures: Photo[]) => {
 };
 
 const paginationTemplate = (currentPage: number, numberOfPages:number) =>{
-
   return `
     <li><button ${currentPage < 2 ? "disabled" : "active" } class="prevPage"> < PREV </button></li>
     <li class="currentPage">${currentPage} / ${numberOfPages}</li>
@@ -93,6 +94,7 @@ const displayPagination = () => {
 };
 
 const conductGallerySearch = () => {
+  spinnerContainer.style.display = 'block';
   api.search
     .getPhotos({
       query: state.searchQuery,
@@ -108,7 +110,7 @@ const conductGallerySearch = () => {
           author: element.user.name,
         }
       });
-
+      spinnerContainer.style.display = 'none';
       update({
         searchQuery: state.searchQuery,
         recentSearches: JSON.parse(localStorage.getItem('recentSearches')) || [],

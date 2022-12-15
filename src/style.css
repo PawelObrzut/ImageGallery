@@ -116,6 +116,10 @@ body {
 	filter: grayscale(100%) blur(0.1rem);
 }
 
+.pagination {
+  background-color: var(--dark-green);
+}
+
 .pages {
   padding: 0 1rem;
   list-style: none;
@@ -147,6 +151,21 @@ body {
 .nextPage:hover {
   color: red;
   cursor: pointer;
+}
+
+.footer {
+  width: 100%;
+  height: 5rem;
+  background-color:  var(--dark-green);
+  border-top: solid 0.5rem var(--black);
+}
+
+.footer a {
+  margin: 2rem;
+}
+
+.gitLogo {
+  background-color: var(--silver);
 }
 
 @keyframes move-down {

@@ -14,7 +14,7 @@ module.exports = {
   plugins: [
     new Dotenv(),
     new HtmlWebpackPlugin({
-      title: 'DEVELOPMENT MODE - Get your favourite image gallery',
+      title: 'Search for your favourite image galleries',
       template: path.resolve(__dirname, './src/template.html'),
     }),
   ],

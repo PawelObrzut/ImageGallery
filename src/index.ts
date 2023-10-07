@@ -126,6 +126,18 @@ const conductGallerySearch = () => {
     });
 };
 
+const getRandomQuery = () => {
+  const keywords = ['landscape', 'nature', 'city', 'animals', 'architecture', 'books', 'happiness'];
+  const randomIndex = Math.floor(Math.random() * keywords.length);
+  return keywords[randomIndex];
+};
+
+const loadRandomPictures = () => {
+  const randomQuery = getRandomQuery();
+  state.searchQuery = randomQuery;
+  conductGallerySearch();
+};
+
 go.addEventListener('click', event => {
   event.preventDefault();
   state.recentSearches.unshift((search as HTMLInputElement).value);
@@ -156,4 +168,5 @@ window.addEventListener('statechange', () => {
   displayPagination();
 });
 
+loadRandomPictures();
 window.dispatchEvent(new Event('statechange'));

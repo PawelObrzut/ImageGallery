@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
@@ -16,6 +17,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Search for your favourite image galleries',
       template: path.resolve(__dirname, './src/template.html'),
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/images/favicon.ico', to: 'favicon.ico' },
+      ],
     }),
   ],
   resolve: {
@@ -38,7 +44,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpeg|gif)$/i,
         loader: 'file-loader',
         options: {
           name: '[path][name].[ext]',
@@ -47,7 +53,7 @@ module.exports = {
           emitFile: true,
           esModule: false,
         },
-      }, 
+      },
     ],
   },
   optimization: {

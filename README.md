@@ -50,7 +50,8 @@ The project is ready to use by opening **dist/index.html** file in your browser.
 
 ***
 
-## Deployed version:
-https://main.d1p5bfrstj7aoq.amplifyapp.com/
-
 ![CartPageDemo](/imageGallery.png)
+
+***
+
+In the root of this project you will also find Dockerfile and nginx.confi files with instructions to encapsulate it into a container. Comes handly when deploying using popular hosting services.
